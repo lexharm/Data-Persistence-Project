@@ -18,7 +18,14 @@ public class MainManager : MonoBehaviour
     
     private bool m_GameOver = false;
 
-    
+    private GameManager _gameManager => GameManager.Instance;
+    private MainUIHandler _uiHandler;
+
+    private void Awake()
+    {
+        _uiHandler = FindFirstObjectByType<MainUIHandler>();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -70,6 +77,12 @@ public class MainManager : MonoBehaviour
 
     public void GameOver()
     {
+        if (_gameManager.BestScore < m_Points)
+        {
+            _gameManager.Save(m_Points);
+            _uiHandler.UpdateBestScoreText();
+        }
+
         m_GameOver = true;
         GameOverText.SetActive(true);
     }
